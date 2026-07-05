@@ -877,7 +877,16 @@
     }
   });
   document.getElementById("exportBtn").addEventListener("click", function(){
-    window.prompt("Your data code — select all (Cmd+A), copy (Cmd+C), then paste it to Claude:", JSON.stringify(state));
+    try{
+      var data = JSON.stringify(state);
+      var blob = new Blob([data], {type:"application/json"});
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "learning-progress-data.json";
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(a.href); }, 1000);
+      alert("Saved a file called 'learning-progress-data.json' (usually to your Downloads folder). Drag it onto your Desktop, then tell Claude.");
+    }catch(e){ alert("Export failed: "+e); }
   });
   document.getElementById("importBtn").addEventListener("click", function(){
     var code = window.prompt("Paste a data code to load it (this replaces the current data):");
