@@ -367,23 +367,28 @@
     if(!state.hiddenDefaults) state.hiddenDefaults = [];
     reconcileStreakBonuses();
   })();
-  // One-time demo seed (this verification copy only): 5-day check-in streak ending 2026-07-04
-  (function seed5day(){
-    try{
-      if(localStorage.getItem("pokeTracker.seed5day")) return;
-      var days = ["2026-06-30","2026-07-01","2026-07-02","2026-07-03","2026-07-04"];
-      var changed = false;
-      days.forEach(function(day){
-        if(!state.entries.some(function(e){return e.kind==="checkin" && e.day===day;})){
-          state.entries.push({kind:"checkin", id:"checkin", name:"📍 Daily check-in", amt:0, ts:keyToTs(day), day:day});
-          changed = true;
-        }
-      });
-      if(changed){ reconcileStreakBonuses(); save(); }
-      localStorage.setItem("pokeTracker.seed5day","1");
-    }catch(e){}
-  })();
   var justChecked = false;
+  // Seed his real progress (reconstructed from his export; totals NT$220)
+  (function seedReal(){
+    try{
+      if(localStorage.getItem("ptSeedReal")) return;
+      function dts(day){ var p=day.split("-"); return new Date(+p[0],+p[1]-1,+p[2],12,0,0).getTime(); }
+      var days = ["2026-06-15","2026-06-16","2026-06-17","2026-06-18","2026-06-19","2026-06-20","2026-06-21","2026-06-22","2026-06-23","2026-06-24","2026-06-25","2026-06-26","2026-06-27","2026-06-28","2026-06-30","2026-07-01","2026-07-02","2026-07-03","2026-07-04"];
+      var e = [];
+      days.forEach(function(d){ e.push({kind:"checkin", id:"checkin", name:"\uD83D\uDCCD Daily check-in", amt:0, ts:dts(d), day:d}); });
+      e.push({kind:"activity", id:"carryover", name:"Earlier activities (carried over)", amt:130, ts:dts("2026-06-15")+1000});
+      e.push({kind:"activity", id:"chinese_sheet", name:"\u7DF4\u7FD2\u5377\u4E00\u5F35 (worksheet)", amt:10, ts:dts("2026-06-17")+2000});
+      e.push({kind:"activity", id:"vocab5", name:"Memorized 5 vocab words", amt:10, ts:dts("2026-06-18")+2000, words:["accident","activity","actually","address","adult"], quizDate:dts("2026-06-21"), quizDone:true, vocabId:"v1781849367178"});
+      e.push({kind:"activity", id:"vocab5", name:"Memorized 5 vocab words", amt:10, ts:dts("2026-06-18")+3000, words:["advanced","adventure","advert","Advertisement","advice"], quizDate:dts("2026-06-21"), quizDone:true, vocabId:"v1781872791901"});
+      e.push({kind:"activity", id:"mathtest", name:"Finished a math test", amt:10, ts:dts("2026-07-02")+1000});
+      e.push({kind:"activity", id:"mathtest", name:"Finished a math test", amt:10, ts:dts("2026-07-02")+2000});
+      e.push({kind:"activity", id:"mathtest", name:"Finished a math test", amt:10, ts:dts("2026-07-02")+3000});
+      state = {name:"Ethan", entries:e, streak:{count:0,lastDay:null,awarded:[]}, checkins:[], customItems:[{id:"custom1781446768279",cat:"english",name:"Bonus Vocab test: Quiz 100 after 3 days",amt:20,icon:"\u2B50",sub:"Custom item",custom:true}], hiddenDefaults:[]};
+      reconcileStreakBonuses();
+      save();
+      localStorage.setItem("ptSeedReal","1");
+    }catch(err){}
+  })();
   var expandedMonths = {};
   var editMode = false;
   var editCheckins = false;
