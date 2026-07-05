@@ -288,6 +288,8 @@
   </div>
 
   <footer>
+    <button class="reset" id="exportBtn">⬆️ Export data</button>
+    <button class="reset" id="importBtn">⬇️ Import data</button>
     <button class="reset" id="resetBtn">Reset everything (parent only)</button>
   </footer>
 </div>
@@ -873,6 +875,23 @@
       state = {name:state.name, entries:[], streak:{count:0,lastDay:null,awarded:[]}, checkins:[], customItems:state.customItems, hiddenDefaults:[]};
       save(); renderAll();
     }
+  });
+  document.getElementById("exportBtn").addEventListener("click", function(){
+    window.prompt("Your data code — select all (Cmd+A), copy (Cmd+C), then paste it to Claude:", JSON.stringify(state));
+  });
+  document.getElementById("importBtn").addEventListener("click", function(){
+    var code = window.prompt("Paste a data code to load it (this replaces the current data):");
+    if(!code) return;
+    try{
+      var s = JSON.parse(code);
+      if(!s || !s.entries){ alert("That doesn't look like a valid data code."); return; }
+      state = s;
+      if(!state.checkins) state.checkins = [];
+      if(!state.customItems) state.customItems = [];
+      if(!state.hiddenDefaults) state.hiddenDefaults = [];
+      reconcileStreakBonuses();
+      save(); location.reload();
+    }catch(e){ alert("Couldn't read that code — make sure you copied all of it."); }
   });
   document.getElementById("checkinBtn").addEventListener("click", checkIn);
   document.getElementById("editEarnBtn").addEventListener("click", function(){
