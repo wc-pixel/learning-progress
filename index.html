@@ -161,7 +161,10 @@
   .cal-cell.sel{border:2px solid var(--flame);background:#fff7ee;}
   .cal-cell.quizday{background:#fff0c8;border-color:#f0b400;}
   .cal-cell.quizday .dnum{color:#b07b00;}
-  .cal-editbar{display:flex;justify-content:flex-end;margin-top:8px;}
+  .fix-section{margin-top:12px;padding:12px 14px;background:#fffbf0;border:1px solid #f2e7be;border-radius:12px;}
+  .fix-head{font-weight:800;color:#5a4500;font-size:.95rem;}
+  .fix-note{font-size:.82rem;color:var(--muted);margin:4px 0 8px;}
+  .fix-section .edit-btn{margin-left:0;}
   .checkin-fix{margin-top:10px;width:100%;background:#fff6dc;border:1px solid #f0dfa0;border-radius:10px;padding:9px;color:#8a6d00;font-weight:800;cursor:pointer;font-size:.85rem;}
   .checkin-fix:hover{background:#fff0c8;}
   .checkin-fix.on{background:#ffe8e6;border-color:#f2b8b2;color:#b3271a;}
@@ -277,7 +280,11 @@
     </div>
     <div class="cal-grid" id="calDow"></div>
     <div class="cal-grid" id="calGrid"></div>
-    <div class="cal-editbar"><button class="edit-btn" id="fixCheckinsBtn">🔧 Fix check-ins</button></div>
+    <div class="fix-section">
+      <div class="fix-head">📅 Missed a day? Fix a check-in</div>
+      <div class="fix-note">Turn this on, then tap the missed day on the calendar above to add his check-in (or remove one added by mistake).</div>
+      <button class="edit-btn" id="fixCheckinsBtn">🔧 Fix check-ins</button>
+    </div>
     <div class="day-detail" id="dayDetail"></div>
   </div>
 
